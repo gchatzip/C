@@ -1,0 +1,123 @@
+
+
+
+/* text section */
+
+
+   0x80481e8 <readString>:	push   %ebp                        // pushes ebp into stack
+   0x80481e9 <readString+1>:	mov    %esp,%ebp                   // ebp <- esp
+   0x80481eb <readString+3>:	sub    $0x38,%esp                 // changes the value of stack pointer so it will now hold space in stack for the local variables buf , i , c 
+   0x80481ee <readString+6>:	movl   $0x0,-0x8(%ebp)            // i=0;
+   0x80481f5 <readString+13>:	mov    0x80b051c,%eax             //  copy the return addr
+   0x80481fa <readString+18>:	mov    %eax,(%esp)                // store return addr
+   0x80481fd <readString+21>:	call   0x8048d20 <getc>           //calls fgetc(stdin)
+   0x8048202 <readString+26>:	mov    %eax,-0x4(%ebp)            // c =char
+   0x8048205 <readString+29>:	cmpl   $0xffffffff,-0x4(%ebp)     // if c==EOF
+   0x8048209 <readString+33>:	je     0x8048220 <readString+56>  // break
+   0x804820b <readString+35>:	cmpl   $0xa,-0x4(%ebp)            // if c=='\n' 
+   0x804820f <readString+39>:	je     0x8048220 <readString+56>  // break
+   0x8048211 <readString+41>:	mov    -0x8(%ebp),%eax            // copy i to eax
+   0x8048214 <readString+44>:	mov    -0x4(%ebp),%edx            // copy c to edx 
+   0x8048217 <readString+47>:	mov    %dl,-0x26(%ebp,%eax,1)     // buf[i] = c
+   0x804821b <readString+51>:	incl   -0x8(%ebp)                 // i ++
+   0x804821e <readString+54>:	jmp    0x80481f5 <readString+13>  // jumps to start of the loop to read the next character from the stdin
+   0x8048220 <readString+56>:	mov    -0x8(%ebp),%eax            // copy i to eax
+   0x8048223 <readString+59>:	movb   $0x0,-0x26(%ebp,%eax,1)    // buf[i]=0
+   0x8048228 <readString+64>:	movl   $0x0,-0x8(%ebp)            // i=0 (the initialization step of the for loop )
+   0x804822f <readString+71>:	jmp    0x8048246 <readString+94>  // changes the flow of programm to do the condition check step of the for loop
+   0x8048231 <readString+73>:	mov    -0x8(%ebp),%eax            // copy i to eax
+   0x8048234 <readString+76>:	mov    %eax,%edx                  // copy i to edx
+   0x8048236 <readString+78>:	add    0x8(%ebp),%edx             
+   0x8048239 <readString+81>:	mov    -0x8(%ebp),%eax
+   0x804823c <readString+84>:	movzbl -0x26(%ebp,%eax,1),%eax   // s[i] = buf[i] 
+   0x8048241 <readString+89>:	mov    %al,(%edx)
+   0x8048243 <readString+91>:	incl   -0x8(%ebp)                // i ++
+   0x8048246 <readString+94>:	cmpl   $0x1d,-0x8(%ebp)          // compares i with buffsize and "remembers" the result of comparison
+   0x804824a <readString+98>:	jle    0x8048231 <readString+73> // continues the loop if the comparison is less than equal i<BUFSIZE  (the condition check step of the loop )
+   0x804824c <readString+100>:	leave                            // deallocates the stack frame of readString function..
+   0x804824d <readString+101>:	ret                              // return
+   
+   0x804824e <main>:	        lea    0x4(%esp),%ecx
+   0x8048252 <main+4>:	        and    $0xfffffff0,%esp
+   0x8048255 <main+7>:	        pushl  -0x4(%ecx)
+   0x8048258 <main+10>:	        push   %ebp                     //pushes ebp into stack 
+   0x8048259 <main+11>:	        mov    %esp,%ebp                // ebp <- esp
+   0x804825b <main+13>:	        push   %edi                     //
+   0x804825c <main+14>:	        push   %esi                     //
+   0x804825d <main+15>:	        push   %ecx                     // 
+   0x804825e <main+16>:	        sub    $0x1c,%esp               //
+   0x8048261 <main+19>:	        mov    $0x80b1bd8,%eax          //
+   0x8048266 <main+24>:	        and    $0xfffff000,%eax         //
+   0x804826b <main+29>:	        movl   $0x7,0x8(%esp)           //
+   0x8048273 <main+37>:	        movl   $0x1,0x4(%esp)           // 
+   0x804827b <main+45>:	        mov    %eax,(%esp)              // pushes the arguments of mprotect into the stack 
+   0x804827e <main+48>:	        call   0x8050140 <mprotect>     // call mprotect function
+   0x8048283 <main+53>:	        movl   $0x8098d28,(%esp)        // %esp <- value
+   0x804828a <main+60>:	        call   0x8048bf0 <puts>         // prints "what is your name " ..
+   0x804828f <main+65>:	        movl   $0x80b1bd8,(%esp)        // %esp <- value 
+   0x8048296 <main+72>:	        call   0x80481e8 <readString>   // call the readstring function..
+   0x804829b <main+77>:	        movl   $0x80b1bd8,-0x10(%ebp)    
+   0x80482a2 <main+84>:	        movl   $0x8098d3b,-0x14(%ebp)
+   0x80482a9 <main+91>:	        movl   $0xe,-0x18(%ebp)          
+   0x80482b0 <main+98>:	        cld    
+   0x80482b1 <main+99>:	        mov    -0x10(%ebp),%esi
+   0x80482b4 <main+102>:	mov    -0x14(%ebp),%edi
+   0x80482b7 <main+105>:	mov    -0x18(%ebp),%ecx
+   0x80482ba <main+108>:	repz cmpsb %es:(%edi),%ds:(%esi) // compares the given name with Angelos bilas 
+   0x80482bc <main+110>:	seta   %dl
+   0x80482bf <main+113>:	setb   %al
+   0x80482c2 <main+116>:	mov    %dl,%cl
+   0x80482c4 <main+118>:	sub    %al,%cl
+   0x80482c6 <main+120>:	mov    %cl,%al
+   0x80482c8 <main+122>:	movsbl %al,%eax
+   0x80482cb <main+125>:	test   %eax,%eax                // if strcmp(Name,"Angelos Bilas")!=0
+   0x80482cd <main+127>:	jne    0x80482d6 <main+136>     // if not equal then change the flow of programm to the printing part 
+   0x80482cf <main+129>:	movb   $0x36,0x80b006c
+   0x80482d6 <main+136>:	movl   $0x80b1bd8,0x4(%esp)
+   0x80482de <main+144>:	movl   $0x8098d49,(%esp)
+   0x80482e5 <main+151>:	call   0x8048bc0 <printf>        //call printf (" Thank you ... 
+   0x80482ea <main+156>:	movzbl 0x80b006c,%eax
+   0x80482f1 <main+163>:	movsbl %al,%eax
+   0x80482f4 <main+166>:	mov    %eax,0x4(%esp)
+   0x80482f8 <main+170>:	movl   $0x8098d5c,(%esp)
+   0x80482ff <main+177>:	call   0x8048bc0 <printf>        //call printf (" i reccomend ... 
+   0x8048304 <main+182>:	movl   $0x0,(%esp)               // 0
+   0x804830b <main+189>:	call   0x80489f0 <exit>          // exit(0)
+   
+   
+/********************************************************/
+/******************* data section ***********************/
+
+    &grade = 0x80b006c "3" ( grade =3 )
+     grade = 51 '3'
+     
+/********************************************************/
+
+
+/********************************************************/
+/****************** bss section *************************/
+
+&Name= (char (*)[30]) 0x80b1bd8   (Name = '\0' <repeats 29 times>)
+
+
+/********************************************************/
+
+/*****************STACK FRAME of readString**************/
+
+esp=0xbffff0c0
+ebp=0xbffff0f8
+
+x/70b $esp :
+
+0xbffff0c0:     0xa0    0x00    0x0b    0x08    0x28    0x8d    0x09    0x08
+0xbffff0c8:     0xf8    0xf0    0xff    0xbf    0x88    0x8c    0x04    0x08  
+0xbffff0d0:     0x40    0x01    0x67    0x69    0x6f    0x72    0x67    0x6f /* buf (giorgos) */
+0xbffff0d8:     0x73    0x00    0x00    0x00    0x0e    0x00    0x00    0x00
+0xbffff0e0:     0x5c    0xf3    0xff    0xbf    0x54    0xf3    0xff    0xbf
+0xbffff0e8:     0x01    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0xbffff0f0:     0x00    0x00    0x00    0x00    0x0a    0x00    0x00    0x00
+0xbffff0f8:     0x28    0xf1    0xff    0xbf    0x9b    0x82    0x04    0x08 /*return address */
+0xbffff100:     0xd8    0x1b    0x0b    0x08    0x01    0x00    
+
+
+
